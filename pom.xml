@@ -67,7 +67,7 @@
 	</dependencies>
 
 	<build>
-		<finalName>krypto_mine</finalName>
+		<finalName>krypto_mine1</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
