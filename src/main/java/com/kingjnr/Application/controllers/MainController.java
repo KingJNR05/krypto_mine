@@ -20,10 +20,6 @@ public class MainController {
     @Autowired
     private UserService userService;
 
-
-
-
-
     @GetMapping("/")
     public String welcome(){
         return "Welcome to the APP";
