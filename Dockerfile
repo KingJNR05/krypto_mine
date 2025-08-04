@@ -6,6 +6,9 @@ WORKDIR /app
 # Copy everything into the container
 COPY . .
 
+# Give execute permission to the Maven wrapper
+RUN chmod +x mvnw
+
 # Build the jar file (skip tests to speed it up)
 RUN ./mvnw clean package -DskipTests
 
