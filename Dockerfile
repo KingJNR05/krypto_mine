@@ -1,7 +1,22 @@
+# Stage 1: Build the app using Maven inside the container
+FROM eclipse-temurin:17-jdk-alpine as builder
+
+WORKDIR /app
+
+# Copy everything into the container
+COPY . .
+
+# Build the jar file (skip tests to speed it up)
+RUN ./mvnw clean package -DskipTests
+
+# Stage 2: Run the app
 FROM eclipse-temurin:17-jdk-alpine
-COPY target/krypto_mine1.jar krypto_mine1.jar
+
+WORKDIR /app
+
+# Copy the jar from the builder stage
+COPY --from=builder /app/target/krypto_mine1.jar app.jar
+
 EXPOSE 8080
+
 ENTRYPOINT ["java", "-jar", "app.jar"]
-
-
-
