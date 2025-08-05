@@ -26,14 +26,16 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
        return http.
-                csrf(c-> c.disable()).
+                csrf(c -> c.disable()).
                 httpBasic(Customizer.withDefaults()).
-                authorizeHttpRequests(auth-> auth.requestMatchers("/register","/login").
-                permitAll().anyRequest().authenticated()).
+                authorizeHttpRequests(auth-> auth.requestMatchers("/register","/login","load").
+                permitAll().
+                requestMatchers("/admin/register").hasRole("ADMIN").anyRequest().authenticated()).
                 sessionManagement(c->c.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).
                 build();
-
     }
+
+
     @Bean
     public DaoAuthenticationProvider provider(){
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsServiceImpl);
@@ -41,6 +43,7 @@ public class SecurityConfig {
 
         return provider;
     }
+
 
     @Bean
     public AuthenticationManager manager(AuthenticationConfiguration config) throws Exception {

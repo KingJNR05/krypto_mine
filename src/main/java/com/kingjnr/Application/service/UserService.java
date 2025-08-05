@@ -1,6 +1,8 @@
 package com.kingjnr.Application.service;
 
+import com.kingjnr.Application.model.Role;
 import com.kingjnr.Application.model.User;
+import com.kingjnr.Application.model.UserDTO;
 import com.kingjnr.Application.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +13,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 public class UserService {
@@ -43,7 +49,7 @@ public class UserService {
         }
     }
 
-    public ResponseEntity<String> login(User user) {
+    public ResponseEntity<String> login(UserDTO user) {
         try {
             if (user.getUsername() == null || user.getUsername().isBlank() ||
                     user.getPassword() == null || user.getPassword().isBlank()) {
@@ -65,4 +71,6 @@ public class UserService {
             return new ResponseEntity<>("Login error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+
 }
