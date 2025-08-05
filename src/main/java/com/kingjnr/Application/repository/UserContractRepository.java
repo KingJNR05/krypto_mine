@@ -1,4 +1,7 @@
 package com.kingjnr.Application.repository;
 
-public class UserContractRepository {
+import com.kingjnr.Application.model.UserContract;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface UserContractRepository extends JpaRepository<UserContract,Long> {
 }

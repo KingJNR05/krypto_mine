@@ -14,9 +14,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @Service
 public class UserService {
@@ -31,12 +28,12 @@ public class UserService {
         try {
             if (user.getUsername() == null || user.getUsername().isBlank() ||
                     user.getPassword() == null || user.getPassword().isBlank()) {
-                return new ResponseEntity<>("Username and password must not be empty", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>("Email and password must not be empty", HttpStatus.BAD_REQUEST);
             }
 
             // Check if user already exists
             if (userRepository.findByEmail(user.getUsername()).isPresent()) {
-                return new ResponseEntity<>("Username already taken", HttpStatus.CONFLICT);
+                return new ResponseEntity<>("An account with this email already exists.", HttpStatus.CONFLICT);
             }
 
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder(12);
@@ -50,23 +47,25 @@ public class UserService {
     }
 
     public ResponseEntity<String> login(UserDTO user) {
+
+
         try {
-            if (user.getUsername() == null || user.getUsername().isBlank() ||
+            if (user.getEmail() == null || user.getEmail().isBlank() ||
                     user.getPassword() == null || user.getPassword().isBlank()) {
-                return new ResponseEntity<>("Username and password must not be empty", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>("Email and password must not be empty", HttpStatus.BAD_REQUEST);
             }
 
             Authentication authentication = authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
+                    new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword())
             );
 
             if (authentication.isAuthenticated()) {
-                return new ResponseEntity<>("Login Success", HttpStatus.OK);
+                return new ResponseEntity<>("Login Success \nWelcome "+ user.getEmail(), HttpStatus.OK);
             } else {
                 return new ResponseEntity<>("Login Failed", HttpStatus.UNAUTHORIZED);
             }
         } catch (BadCredentialsException e) {
-            return new ResponseEntity<>("Invalid username or password", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>("Invalid email or password", HttpStatus.UNAUTHORIZED);
         } catch (Exception e) {
             return new ResponseEntity<>("Login error: " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }

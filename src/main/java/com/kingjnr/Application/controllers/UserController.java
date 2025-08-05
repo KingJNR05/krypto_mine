@@ -10,13 +10,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-public class MainController {
+public class UserController {
 
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private ContractUserService contractUserService;
+
 
     @GetMapping("/")
     public String welcome(){
@@ -42,9 +41,5 @@ public class MainController {
 
 
 
-    @PostMapping("/contract/{id}")
-    public ResponseEntity<String> createContract(@RequestBody Long userId, @PathVariable Long id){
 
-        return contractUserService.createUserContract(userId, id);
-    }
 }

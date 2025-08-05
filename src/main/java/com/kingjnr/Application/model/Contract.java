@@ -5,6 +5,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import java.math.BigDecimal;
+
 @Entity
 public class Contract {
 
@@ -15,14 +17,14 @@ public class Contract {
     private String title;
     private String hashPower;
     private int contractPeriod;
-    private double dailyProfit;
-    private double totalProfit;
-    private double investmentAmount;
+    private BigDecimal dailyProfit;
+    private BigDecimal totalProfit;
+    private BigDecimal investmentAmount;
 
 
     public Contract() {}
 
-    public Contract(String title, String hashPower, int contractPeriod, double dailyProfit, double totalProfit, double investmentAmount) {
+    public Contract(String title, String hashPower, int contractPeriod, BigDecimal dailyProfit, BigDecimal totalProfit, BigDecimal investmentAmount) {
         this.title = title;
         this.hashPower = hashPower;
         this.contractPeriod = contractPeriod;
@@ -63,27 +65,27 @@ public class Contract {
         this.contractPeriod = contractPeriod;
     }
 
-    public double getDailyProfit() {
+    public BigDecimal getDailyProfit() {
         return dailyProfit;
     }
 
-    public void setDailyProfit(double dailyProfit) {
+    public void setDailyProfit(BigDecimal dailyProfit) {
         this.dailyProfit = dailyProfit;
     }
 
-    public double getTotalProfit() {
+    public BigDecimal getTotalProfit() {
         return totalProfit;
     }
 
-    public void setTotalProfit(double totalProfit) {
+    public void setTotalProfit(BigDecimal totalProfit) {
         this.totalProfit = totalProfit;
     }
 
-    public double getInvestmentAmount() {
+    public BigDecimal getInvestmentAmount() {
         return investmentAmount;
     }
 
-    public void setInvestmentAmount(double investmentAmount) {
+    public void setInvestmentAmount(BigDecimal investmentAmount) {
         this.investmentAmount = investmentAmount;
     }
 }

@@ -8,7 +8,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity
 @Table(name = "user_contract")
@@ -20,11 +19,16 @@ public class UserContract {
 
     private String title;
 
+    private BigDecimal currentAmount;
     private LocalDate startDate;
 
     private LocalDate endDate;
 
+    private BigDecimal amountAtEndOfContract;
+    private BigDecimal investedAmount;
 
+    @Enumerated(EnumType.STRING)
+    private ContractStatus contractStatus;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
@@ -33,12 +37,15 @@ public class UserContract {
 
     public UserContract() {}
 
-    public UserContract(Long contract_id, String title, LocalDate startDate, LocalDate endDate, User user) {
+    public UserContract(Long contract_id, String title, BigDecimal currentAmount, LocalDate startDate, LocalDate endDate, BigDecimal amountAtEndOfContract, BigDecimal investedAmount, ContractStatus contractStatus, User user) {
         this.contract_id = contract_id;
         this.title = title;
-
+        this.currentAmount = currentAmount;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.amountAtEndOfContract = amountAtEndOfContract;
+        this.investedAmount = investedAmount;
+        this.contractStatus = contractStatus;
         this.user = user;
     }
 
@@ -57,13 +64,6 @@ public class UserContract {
     public void setTitle(String title) {
         this.title = title;
     }
-
-
-
-
-
-
-
 
     public User getUser() {
         return user;
@@ -87,5 +87,37 @@ public class UserContract {
 
     public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    public BigDecimal getCurrentAmount() {
+        return currentAmount;
+    }
+
+    public void setCurrentAmount(BigDecimal currentAmount) {
+        this.currentAmount = currentAmount;
+    }
+
+    public BigDecimal getAmountAtEndOfContract() {
+        return amountAtEndOfContract;
+    }
+
+    public void setAmountAtEndOfContract(BigDecimal amountAtEndOfContract) {
+        this.amountAtEndOfContract = amountAtEndOfContract;
+    }
+
+    public BigDecimal getInvestedAmount() {
+        return investedAmount;
+    }
+
+    public void setInvestedAmount(BigDecimal investedAmount) {
+        this.investedAmount = investedAmount;
+    }
+
+    public ContractStatus getContractStatus() {
+        return contractStatus;
+    }
+
+    public void setContractStatus(ContractStatus contractStatus) {
+        this.contractStatus = contractStatus;
     }
 }
