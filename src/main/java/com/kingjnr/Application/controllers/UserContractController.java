@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 
+@CrossOrigin( origins = "https://kryptomine.netlify.app/")
 @RestController
 public class UserContractController {
 
