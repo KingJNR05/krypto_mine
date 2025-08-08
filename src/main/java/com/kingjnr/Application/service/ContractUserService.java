@@ -14,7 +14,8 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -31,12 +32,15 @@ public class ContractUserService {
 
 
 
-    public ResponseEntity<String> createUserContract(Long userId, Long contractId) {
+    public ResponseEntity<?> createUserContract(Long userId, Long contractId) {
+        Map<String,Object> response = new HashMap<>();
+
         Optional<User> userOptional = userRepository.findById(userId);
         Optional<Contract> contractOptional = contractRepository.findById(contractId);
 
         if (userOptional.isEmpty() || contractOptional.isEmpty()) {
-            return new ResponseEntity<>("User or Contract not found", HttpStatus.NOT_FOUND);
+            response.put("message", "User or Contract not found");
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
 
         User user = userOptional.get();
@@ -64,8 +68,8 @@ public class ContractUserService {
 
         userContractRepository.save(userContract);
 
-
-        return new ResponseEntity<>("Contract assigned to user successfully", HttpStatus.OK);
+        response.put("message","Contract assigned to user successfully");
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     public ResponseEntity<BigDecimal> getCurrentAmount(Long contractId) {
@@ -76,7 +80,7 @@ public class ContractUserService {
     }
 
 
-    public ResponseEntity<BigDecimal> getEndOfCOntractAmount(Long contractId) {
+    public ResponseEntity<BigDecimal> getEndOfContractAmount(Long contractId) {
         Optional<UserContract> optionalUserContract = userContractRepository.findById(contractId);
 
         return optionalUserContract.map(userContract -> new ResponseEntity<>(userContract.getAmountAtEndOfContract(), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.EXPECTATION_FAILED));

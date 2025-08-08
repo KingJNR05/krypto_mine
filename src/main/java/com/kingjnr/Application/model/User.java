@@ -21,8 +21,7 @@ public class User implements UserDetails {
 
     private String firstName;
     private String lastName;
-    private String email;
-    private String password;
+
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -31,6 +30,9 @@ public class User implements UserDetails {
 
     @OneToMany(mappedBy = "user")
     private List<UserContract> userContracts;
+
+    private String email;
+    private String password;
 
     public User(Long id, String firstName, String lastName, String email, String password, Role role, String referralCode, List<UserContract> userContracts) {
         this.id = id;

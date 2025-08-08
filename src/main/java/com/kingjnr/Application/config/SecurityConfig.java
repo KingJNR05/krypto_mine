@@ -31,7 +31,7 @@ public class SecurityConfig {
                 authorizeHttpRequests(auth-> auth.requestMatchers("/register","/login","load").
                 permitAll().
                 requestMatchers("/admin/register").hasRole("ADMIN").anyRequest().authenticated()).
-                sessionManagement(c->c.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).
+                sessionManagement(c->c.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)).
                 build();
     }
 

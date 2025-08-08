@@ -1,13 +1,13 @@
 package com.kingjnr.Application.model;
 
-public class UserDTO {
+public class UserLoginDTO {
 
     private Integer id;
 
     private String email;
     private String password;
 
-    public UserDTO(Integer id, String email, String password) {
+    public UserLoginDTO(Integer id, String email, String password) {
         this.id = id;
         this.email = email;
         this.password = password;
