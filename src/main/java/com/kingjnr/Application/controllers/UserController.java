@@ -11,7 +11,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin( origins = "https://kryptomine.netlify.app/")
+@CrossOrigin(
+        origins = {"https://kryptomine.netlify.app", "https://816c8d5e-d4ad-4e31-b4f2-602b3f955d5a.lovableproject.com"},
+        allowCredentials = "true",
+        methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE, RequestMethod.OPTIONS},
+        allowedHeaders = {"*"}
+        )
+
 @RestController
 public class UserController {
 
@@ -59,7 +65,5 @@ public class UserController {
         String email = auth.getName();
         return ResponseEntity.ok("Logged in as: " + email);
     }
-
-
 
 }

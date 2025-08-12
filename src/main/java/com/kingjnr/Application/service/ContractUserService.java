@@ -30,8 +30,6 @@ public class ContractUserService {
     private UserRepository userRepository;
 
 
-
-
     public ResponseEntity<?> createUserContract(Long userId, Long contractId) {
         Map<String,Object> response = new HashMap<>();
 
