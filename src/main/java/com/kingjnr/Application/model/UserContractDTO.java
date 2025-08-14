@@ -11,7 +11,7 @@ public class UserContractDTO {
 
     private String title;
 
-    private BigDecimal currentAmount;
+    private BigDecimal dailyProfit;
     private LocalDate startDate;
 
     private LocalDate endDate;
@@ -21,10 +21,10 @@ public class UserContractDTO {
 
     private ContractStatus contractStatus;
 
-    public UserContractDTO(Long contract_id, String title, BigDecimal currentAmount, LocalDate startDate, LocalDate endDate, BigDecimal amountAtEndOfContract, BigDecimal investedAmount, ContractStatus contractStatus) {
+    public UserContractDTO(Long contract_id, String title, BigDecimal dailyProfit, LocalDate startDate, LocalDate endDate, BigDecimal amountAtEndOfContract, BigDecimal investedAmount, ContractStatus contractStatus) {
         this.contract_id = contract_id;
         this.title = title;
-        this.currentAmount = currentAmount;
+        this.dailyProfit = dailyProfit;
         this.startDate = startDate;
         this.endDate = endDate;
         this.amountAtEndOfContract = amountAtEndOfContract;
@@ -49,11 +49,11 @@ public class UserContractDTO {
     }
 
     public BigDecimal getCurrentAmount() {
-        return currentAmount;
+        return dailyProfit;
     }
 
-    public void setCurrentAmount(BigDecimal currentAmount) {
-        this.currentAmount = currentAmount;
+    public void setCurrentAmount(BigDecimal dailyProfit) {
+        this.dailyProfit = dailyProfit;
     }
 
     public LocalDate getStartDate() {

@@ -7,14 +7,19 @@ import com.kingjnr.Application.model.UserContract;
 import com.kingjnr.Application.repository.ContractRepository;
 import com.kingjnr.Application.repository.UserContractRepository;
 import com.kingjnr.Application.repository.UserRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -26,6 +31,7 @@ public class ContractUserService {
 
     @Autowired
     private UserContractRepository userContractRepository;
+
     @Autowired
     private UserRepository userRepository;
 
@@ -44,20 +50,21 @@ public class ContractUserService {
         User user = userOptional.get();
         Contract contract = contractOptional.get();
 
-        LocalDate currentDate = LocalDate.now();
+        LocalDate startDate = LocalDate.now();
         LocalDate endDate = LocalDate.now().plusDays(contract.getContractPeriod());
-        BigDecimal currentAmount = BigDecimal.valueOf(contract.getDailyProfit().longValue() * (endDate.getDayOfYear() - currentDate.getDayOfYear()));
+
+
         BigDecimal amountAtEndOfContract = BigDecimal.valueOf(contract.getContractPeriod() * contract.getDailyProfit().longValue());
 
-        ContractStatus contractStatus = currentDate.isAfter(endDate) ? ContractStatus.EXPIRED : ContractStatus.ACTIVE;
+        ContractStatus contractStatus = startDate.isAfter(endDate) ? ContractStatus.EXPIRED : ContractStatus.ACTIVE;
 
 
         UserContract userContract = new UserContract(
                 null,
                 contract.getTitle(),
-                currentAmount,
-                currentDate,
+                startDate,
                 endDate,
+                contract.getDailyProfit(),
                 amountAtEndOfContract,
                 contract.getInvestmentAmount(),
                 contractStatus,
@@ -72,9 +79,19 @@ public class ContractUserService {
 
     public ResponseEntity<BigDecimal> getCurrentAmount(Long contractId) {
         Optional<UserContract> optionalUserContract = userContractRepository.findById(contractId);
+        if (optionalUserContract.isPresent()) {
 
-        return optionalUserContract.map(userContract -> new ResponseEntity<>(userContract.getCurrentAmount(), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.EXPECTATION_FAILED));
+            LocalDate startDate = optionalUserContract.get().getStartDate();
+            LocalDate currentDate = LocalDate.now();
+            long daysBetweenStartDateAndCurrentDate = ChronoUnit.DAYS.between(startDate,currentDate);
 
+            BigDecimal currentAmount = optionalUserContract.get().getDailyProfit().multiply(BigDecimal.valueOf(daysBetweenStartDateAndCurrentDate));
+
+            return new ResponseEntity<>(currentAmount,HttpStatus.OK);
+
+        }
+
+        return new ResponseEntity<>(null, HttpStatus.EXPECTATION_FAILED);
     }
 
 
@@ -84,4 +101,65 @@ public class ContractUserService {
         return optionalUserContract.map(userContract -> new ResponseEntity<>(userContract.getAmountAtEndOfContract(), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(null, HttpStatus.EXPECTATION_FAILED));
 
     }
+
+    public ResponseEntity<Integer> getContractProgress(Long contractId){
+        Optional<UserContract> optionalUserContract = userContractRepository.findById(contractId);
+
+        if(optionalUserContract.isPresent()){
+
+            LocalDate startDate = optionalUserContract.get().getStartDate();
+            LocalDate endDate = optionalUserContract.get().getEndDate();
+            long daysBetweenStartDateAndCurrentDate = ChronoUnit.DAYS.between(startDate, LocalDate.now());
+            long totalDays = ChronoUnit.DAYS.between(startDate, endDate);
+
+            long progress = ((daysBetweenStartDateAndCurrentDate/totalDays) * 100);
+
+            return new ResponseEntity<>((int)progress,HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(null,HttpStatus.EXPECTATION_FAILED);
+    }
+
+    public ResponseEntity<Integer> getNumberOfActiveContracts(HttpServletRequest request){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+
+        if(optionalUser.isPresent()){
+            User user = optionalUser.get();
+           List<UserContract> userContracts = user.getUserContracts();
+           return new ResponseEntity<>(userContracts.size(),HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(null,HttpStatus.EXPECTATION_FAILED);
+    }
+
+
+    public ResponseEntity<BigDecimal> getTotalEarnings(HttpServletRequest request){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getName();
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+
+        if(optionalUser.isPresent()){
+            User user = optionalUser.get();
+            List<UserContract> userContracts = user.getUserContracts();
+            BigDecimal totalAmount = new BigDecimal(0);
+            for (int i=0;i<userContracts.size();i++) {
+
+                totalAmount = totalAmount.add(getCurrentAmount(userContracts.get(i).getContract_id()).getBody());
+
+            }
+            return new ResponseEntity<>(totalAmount,HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(null,HttpStatus.EXPECTATION_FAILED);
+    }
+
+
+
+
+
+
 }

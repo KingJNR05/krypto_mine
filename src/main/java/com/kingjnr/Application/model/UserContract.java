@@ -18,12 +18,9 @@ public class UserContract {
     private Long contract_id;
 
     private String title;
-
-    private BigDecimal currentAmount;
     private LocalDate startDate;
-
     private LocalDate endDate;
-
+    private BigDecimal dailyProfit;
     private BigDecimal amountAtEndOfContract;
     private BigDecimal investedAmount;
 
@@ -37,12 +34,12 @@ public class UserContract {
 
     public UserContract() {}
 
-    public UserContract(Long contract_id, String title, BigDecimal currentAmount, LocalDate startDate, LocalDate endDate, BigDecimal amountAtEndOfContract, BigDecimal investedAmount, ContractStatus contractStatus, User user) {
+    public UserContract(Long contract_id, String title, LocalDate startDate, LocalDate endDate, BigDecimal dailyProfit, BigDecimal amountAtEndOfContract, BigDecimal investedAmount, ContractStatus contractStatus, User user) {
         this.contract_id = contract_id;
         this.title = title;
-        this.currentAmount = currentAmount;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.dailyProfit = dailyProfit;
         this.amountAtEndOfContract = amountAtEndOfContract;
         this.investedAmount = investedAmount;
         this.contractStatus = contractStatus;
@@ -89,14 +86,6 @@ public class UserContract {
         this.endDate = endDate;
     }
 
-    public BigDecimal getCurrentAmount() {
-        return currentAmount;
-    }
-
-    public void setCurrentAmount(BigDecimal currentAmount) {
-        this.currentAmount = currentAmount;
-    }
-
     public BigDecimal getAmountAtEndOfContract() {
         return amountAtEndOfContract;
     }
@@ -119,5 +108,13 @@ public class UserContract {
 
     public void setContractStatus(ContractStatus contractStatus) {
         this.contractStatus = contractStatus;
+    }
+
+    public BigDecimal getDailyProfit() {
+        return dailyProfit;
+    }
+
+    public void setDailyProfit(BigDecimal dailyProfit) {
+        this.dailyProfit = dailyProfit;
     }
 }

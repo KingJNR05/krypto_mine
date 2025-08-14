@@ -122,7 +122,7 @@ public class UserService {
                             stream().
                             map(contract -> new UserContractDTO(contract.getContract_id(),
                                     contract.getTitle(),
-                                    contract.getCurrentAmount(),
+                                    contract.getDailyProfit(),
                                     contract.getStartDate(),
                                     contract.getEndDate(),
                                     contract.getAmountAtEndOfContract(),
