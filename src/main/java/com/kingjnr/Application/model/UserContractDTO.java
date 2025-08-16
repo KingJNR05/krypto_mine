@@ -19,9 +19,11 @@ public class UserContractDTO {
     private BigDecimal amountAtEndOfContract;
     private BigDecimal investedAmount;
 
+    private Integer progress;
+
     private ContractStatus contractStatus;
 
-    public UserContractDTO(Long contract_id, String title, BigDecimal dailyProfit, LocalDate startDate, LocalDate endDate, BigDecimal amountAtEndOfContract, BigDecimal investedAmount, ContractStatus contractStatus) {
+    public UserContractDTO(Long contract_id, String title, BigDecimal dailyProfit, LocalDate startDate, LocalDate endDate, BigDecimal amountAtEndOfContract, BigDecimal investedAmount, Integer progress, ContractStatus contractStatus) {
         this.contract_id = contract_id;
         this.title = title;
         this.dailyProfit = dailyProfit;
@@ -29,6 +31,7 @@ public class UserContractDTO {
         this.endDate = endDate;
         this.amountAtEndOfContract = amountAtEndOfContract;
         this.investedAmount = investedAmount;
+        this.progress = progress;
         this.contractStatus = contractStatus;
     }
 
@@ -94,5 +97,21 @@ public class UserContractDTO {
 
     public void setContractStatus(ContractStatus contractStatus) {
         this.contractStatus = contractStatus;
+    }
+
+    public BigDecimal getDailyProfit() {
+        return dailyProfit;
+    }
+
+    public void setDailyProfit(BigDecimal dailyProfit) {
+        this.dailyProfit = dailyProfit;
+    }
+
+    public Integer getProgress() {
+        return progress;
+    }
+
+    public void setProgress(Integer progress) {
+        this.progress = progress;
     }
 }

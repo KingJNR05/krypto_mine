@@ -27,8 +27,12 @@ public class UserService {
 
     @Autowired
     private JwtService jwtService;
+
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private ContractUserService contractUserService;
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -125,6 +129,7 @@ public class UserService {
                                     contract.getEndDate(),
                                     contract.getAmountAtEndOfContract(),
                                     contract.getInvestedAmount(),
+                                    contractUserService.getContractProgress(contract.getStartDate(),contract.getEndDate()).getBody(),
                                     contract.getContractStatus()))
                     .toList();
 

@@ -24,6 +24,8 @@ public class UserContract {
     private BigDecimal amountAtEndOfContract;
     private BigDecimal investedAmount;
 
+    private Integer progress;
+
     @Enumerated(EnumType.STRING)
     private ContractStatus contractStatus;
 
@@ -34,7 +36,7 @@ public class UserContract {
 
     public UserContract() {}
 
-    public UserContract(Long contract_id, String title, LocalDate startDate, LocalDate endDate, BigDecimal dailyProfit, BigDecimal amountAtEndOfContract, BigDecimal investedAmount, ContractStatus contractStatus, User user) {
+    public UserContract(Long contract_id, String title, LocalDate startDate, LocalDate endDate, BigDecimal dailyProfit, BigDecimal amountAtEndOfContract, BigDecimal investedAmount, Integer progress, ContractStatus contractStatus, User user) {
         this.contract_id = contract_id;
         this.title = title;
         this.startDate = startDate;
@@ -42,6 +44,7 @@ public class UserContract {
         this.dailyProfit = dailyProfit;
         this.amountAtEndOfContract = amountAtEndOfContract;
         this.investedAmount = investedAmount;
+        this.progress = progress;
         this.contractStatus = contractStatus;
         this.user = user;
     }
@@ -116,5 +119,13 @@ public class UserContract {
 
     public void setDailyProfit(BigDecimal dailyProfit) {
         this.dailyProfit = dailyProfit;
+    }
+
+    public Integer getProgress() {
+        return progress;
+    }
+
+    public void setProgress(Integer progress) {
+        this.progress = progress;
     }
 }

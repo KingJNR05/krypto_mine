@@ -46,6 +46,7 @@ public class SecurityConfig {
                 sessionManagement(c->c.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).
                 addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class).
                 build();
+
     }
 
 

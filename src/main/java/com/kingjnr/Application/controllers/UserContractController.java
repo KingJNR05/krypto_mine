@@ -1,5 +1,7 @@
 package com.kingjnr.Application.controllers;
 
+import com.kingjnr.Application.model.UserContract;
+import com.kingjnr.Application.model.UserContractDTO;
 import com.kingjnr.Application.service.ContractUserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @CrossOrigin( origins = "https://kryptomine.netlify.app/")
 @RestController
@@ -31,21 +34,21 @@ public class UserContractController {
         return contractUserService.getEndOfContractAmount(userId);
     }
 
-    @GetMapping("/totalEarnings")
+    @GetMapping("/totalEarningsAllContracts")
     public ResponseEntity<BigDecimal> getTotalEarnings(HttpServletRequest request){
         return contractUserService.getTotalEarnings(request);
     }
 
-    @GetMapping("/contractProgress/{contractId}")
-    public ResponseEntity<Integer> getContractProgress(@PathVariable Long contractId){
-        return contractUserService.getContractProgress(contractId);
-    }
 
     @GetMapping("activeContracts")
     public ResponseEntity<Integer> getNumberOfActiveContracts(HttpServletRequest request){
         return contractUserService.getNumberOfActiveContracts(request);
     }
 
+    @GetMapping("/recentEarnings")
+    public ResponseEntity<List<UserContract>> recentEarnings(){
+        return contractUserService.getRecentEarningContracts();
+    }
 
 
 }

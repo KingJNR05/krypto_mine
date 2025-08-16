@@ -1,14 +1,12 @@
 package com.kingjnr.Application.service;
 
-import com.kingjnr.Application.model.Contract;
-import com.kingjnr.Application.model.ContractStatus;
-import com.kingjnr.Application.model.User;
-import com.kingjnr.Application.model.UserContract;
+import com.kingjnr.Application.model.*;
 import com.kingjnr.Application.repository.ContractRepository;
 import com.kingjnr.Application.repository.UserContractRepository;
 import com.kingjnr.Application.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -18,10 +16,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ContractUserService {
@@ -67,6 +62,7 @@ public class ContractUserService {
                 contract.getDailyProfit(),
                 amountAtEndOfContract,
                 contract.getInvestmentAmount(),
+                getContractProgress(startDate,endDate).getBody(),
                 contractStatus,
                 user
         );
@@ -102,22 +98,14 @@ public class ContractUserService {
 
     }
 
-    public ResponseEntity<Integer> getContractProgress(Long contractId){
-        Optional<UserContract> optionalUserContract = userContractRepository.findById(contractId);
+    public ResponseEntity<Integer> getContractProgress(LocalDate startDate, LocalDate endDate){
 
-        if(optionalUserContract.isPresent()){
-
-            LocalDate startDate = optionalUserContract.get().getStartDate();
-            LocalDate endDate = optionalUserContract.get().getEndDate();
             long daysBetweenStartDateAndCurrentDate = ChronoUnit.DAYS.between(startDate, LocalDate.now());
             long totalDays = ChronoUnit.DAYS.between(startDate, endDate);
 
             long progress = ((daysBetweenStartDateAndCurrentDate/totalDays) * 100);
 
             return new ResponseEntity<>((int)progress,HttpStatus.OK);
-        }
-
-        return new ResponseEntity<>(null,HttpStatus.EXPECTATION_FAILED);
     }
 
     public ResponseEntity<Integer> getNumberOfActiveContracts(HttpServletRequest request){
@@ -158,8 +146,22 @@ public class ContractUserService {
     }
 
 
+    public ResponseEntity<List<UserContract>> getRecentEarningContracts() {
+         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+         String email = authentication.getName();
+         Optional<User> optionalUser = userRepository.findByEmail(email);
 
+         if(optionalUser.isPresent()){
+             List<UserContract> contracts = optionalUser.get().getUserContracts();
+             List<UserContract> completedContracts = new ArrayList<>();
+             for(UserContract contract : contracts){
+                 if(contract.getContractStatus() == ContractStatus.ACTIVE){
+                     completedContracts.add(contract);
+                 }
+             }
+            return new ResponseEntity<>(completedContracts,HttpStatus.OK);
+         }
 
-
-
+         return new ResponseEntity<>(null,HttpStatus.EXPECTATION_FAILED);
+    }
 }
