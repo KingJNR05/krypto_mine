@@ -1,5 +1,6 @@
 package com.kingjnr.Application.config;
 
+import com.kingjnr.Application.filters.JwtFilter;
 import com.kingjnr.Application.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -13,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -25,6 +27,8 @@ import java.util.List;
 @Configuration
 public class SecurityConfig {
 
+    @Autowired
+    private JwtFilter jwtFilter;
     @Autowired
     private UserDetailsServiceImpl userDetailsServiceImpl;
 
@@ -39,7 +43,8 @@ public class SecurityConfig {
                 authorizeHttpRequests(auth-> auth.requestMatchers("/register","/login","load").
                 permitAll().
                 requestMatchers("/admin/register").hasRole("ADMIN").anyRequest().authenticated()).
-                sessionManagement(c->c.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)).
+                sessionManagement(c->c.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).
+                addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class).
                 build();
     }
 

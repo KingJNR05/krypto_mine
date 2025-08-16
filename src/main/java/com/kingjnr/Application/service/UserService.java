@@ -26,6 +26,8 @@ import java.util.stream.Collectors;
 public class UserService {
 
     @Autowired
+    private JwtService jwtService;
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
@@ -58,7 +60,7 @@ public class UserService {
         }
     }
 
-    public ResponseEntity<Map<String, Object>> login(UserLoginDTO userLoginDto, HttpServletRequest request) {
+    public ResponseEntity<Map<String, Object>> login(UserLoginDTO userLoginDto) {
         Map<String, Object> response = new HashMap<>();
 
         try {
@@ -74,11 +76,7 @@ public class UserService {
 
             if (authentication.isAuthenticated()) {
 
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-                request.getSession(true);
-
-
-                response.put("message", "Login successful");
+                response.put("message", jwtService.generateToken(userLoginDto));
 
                 return new ResponseEntity<>(response, HttpStatus.OK);
             } else {

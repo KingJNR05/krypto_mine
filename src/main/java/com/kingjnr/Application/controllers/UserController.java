@@ -44,8 +44,8 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserLoginDTO user, HttpServletRequest request){
-        return userService.login(user, request);
+    public ResponseEntity<?> login(@RequestBody UserLoginDTO user){
+        return userService.login(user);
     }
 
     @GetMapping("/logout")
