@@ -103,7 +103,9 @@ public class ContractUserService {
             long daysBetweenStartDateAndCurrentDate = ChronoUnit.DAYS.between(startDate, LocalDate.now());
             long totalDays = ChronoUnit.DAYS.between(startDate, endDate);
 
-            long progress = ((daysBetweenStartDateAndCurrentDate/totalDays) * 100);
+            long progress = ((daysBetweenStartDateAndCurrentDate * 100) /totalDays);
+
+            System.out.println(progress);
 
             return new ResponseEntity<>((int)progress,HttpStatus.OK);
     }
